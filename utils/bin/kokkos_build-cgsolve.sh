@@ -76,12 +76,13 @@ cd cgsolve || exit 1
 # For now, we simply stick with what the Kokkos developers did, but we may want to change it
 # But one thing we may need to change is the compiler name. let's do brute force for now.
 sed -i "s/amdclang++/${COMPILERNAME_TO_USE}/g" ../Makefile.inc
+# Do not use debug info for the time being.
+sed -i "s/-O3 -g/-O3/g" Makefile
 
 cmd="PATH=$AOMP/bin:$PATH CXX=clang++ make KOKKOS_PATH=$KOKKOS_SOURCE_DIR arch=MI250x backend=ompt comp=rocmclang"
 
 print_info "$cmd"
-
-PATH=$AOMP/bin:$PATH CXX=clang++ make KOKKOS_PATH=$KOKKOS_SOURCE_DIR arch=MI250x backend=ompt comp=rocmclang -j$NUM_THREADS
+PATH=$AOMP/bin:$PATH CXX=clang++ make KOKKOS_PATH=$KOKKOS_SOURCE_DIR arch=MI250x backend=ompt comp=rocmclang -j${NUM_THREADS}
 #OFFLOAD_FLAGS='-ffast-math -fopenmp-target-fast'
 
 
